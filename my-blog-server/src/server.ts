@@ -1,10 +1,12 @@
 'use strict';
 import express from 'express';
 import routes from './routes';
+import logger from 'morgan';
 import { connect } from './database/connection';
 
 const app = express();
 app.use(express.json());
+app.use(logger('dev'));
 app.use(routes);
 
 connect(() => {
