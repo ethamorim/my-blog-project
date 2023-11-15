@@ -12,6 +12,24 @@ const router = Router();
 
 const ARTICLES_COLLECTION = 'articles';
 
+router.get(['/api/articles', '/api/articles/:articleId'], async (req: Request<{articleId: string}>, res, next) => {
+    getConnection([ ARTICLES_COLLECTION ], async (collections: TCollections) => {
+        const articlesCollection = collections[ARTICLES_COLLECTION];
+        const { articleId } = req.params;
+        if (articleId) {
+            let document: WithId<Document>;
+            try {
+                document = await getDocumentById(articlesCollection, new ObjectId(articleId));
+            } catch (error) {
+                return res.sendStatus(404).send('Article not found');
+            }
+            res.json(document);
+        } else {
+            res.json(await articlesCollection.find({}).toArray());
+        }
+    });
+});
+
 router.put('/api/articles/:articleId/upvote', async (req: Request<{ articleId: string }>, res, next) => {
     getConnection([ ARTICLES_COLLECTION ], async (collections: TCollections) => {
         const { articleId } = req.params; 
