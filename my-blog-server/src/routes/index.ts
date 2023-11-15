@@ -21,7 +21,7 @@ router.get(['/api/articles', '/api/articles/:articleId'], async (req: Request<{a
             try {
                 document = await getDocumentById(articlesCollection, new ObjectId(articleId));
             } catch (error) {
-                return res.sendStatus(404).send('Article not found');
+                return res.status(404).send('Article not found');
             }
             res.json(document);
         } else {
@@ -38,14 +38,14 @@ router.put('/api/articles/:articleId/upvote', async (req: Request<{ articleId: s
         try {
             document = await getDocumentById(articlesCollection, new ObjectId(articleId));
         } catch (error) {
-            return res.sendStatus(404).send('Article not found');
+            return res.status(404).send('Article not found');
         }
         const article = new Article(document._id, document.name, document.upvotes, document.comments, document.author);
         article.upvote();
         if (await updateOneById(articlesCollection, article.getId(), { $set: { upvotes: article.getUpvotes() } })) {
             res.sendStatus(200);
         } else {
-            res.sendStatus(500).send('Something went wrong updating this article...');
+            res.status(500).send('Something went wrong updating this article...');
         }
     });
 });
@@ -54,30 +54,23 @@ router.post('/api/articles/:articleId/comment', (req: Request<{ articleId: strin
     getConnection([ ARTICLES_COLLECTION ], async (collections: TCollections) => {
         const { articleId } = req.params;
         const { postedBy, text } = req.body;
+        const articlesCollection = collections[ARTICLES_COLLECTION];
     
         let document: WithId<Document>;
         try {
-            document = await getDocumentById(collections[ARTICLES_COLLECTION], new ObjectId(articleId));
+            document = await getDocumentById(articlesCollection, new ObjectId(articleId));
         } catch (error) {
-            return res.sendStatus(404).send('Article not found');
+            return res.status(404).send('Article not found');
         }
         const article = new Article(document._id, document.name, document.upvotes, document.comments, document.author);
         const comment = new Comment(postedBy, text);
         article.addComment(comment);
-        
-        res.sendStatus(200).end();
+        if (await updateOneById(articlesCollection, article.getId(), { $set: { comments: article.getComments() } })) {
+            res.status(200).json(article.getComments());
+        } else {
+            res.status(500).send('Something went wrong updating this article...');
+        }
     });
-
-    // const article = articlesInfo.find(a => a.name === name);
-    // if (article) {
-    //     article.comments.push({
-    //         postedBy,
-    //         text,
-    //     });
-    //     res.status(201).json(article.comments);
-    // } else {
-    //     res.status(404).send('Article not found');
-    // }
 });
 
 export default router;

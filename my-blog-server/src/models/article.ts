@@ -28,6 +28,10 @@ export default class Article implements IArticle {
         return this.upvotes;
     }
 
+    getComments(): IComment[] {
+        return this.comments;
+    }
+
     upvote(): void {
         this.upvotes += 1;
     }

@@ -12,6 +12,7 @@ export default interface IArticle {
     
     getId(): ObjectId;
     getUpvotes(): number;
+    getComments(): IComment[];
     upvote(): void;
     addComment(comment: IComment): void;
 
