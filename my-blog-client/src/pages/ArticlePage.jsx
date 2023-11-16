@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+import CommentsList from "../components/CommentsList";
 import NotFoundPage from "./NotFoundPage";
 
 import articles from '../assets/articlesContent';
@@ -13,7 +14,7 @@ const ArticlePage = () => {
   useEffect(() => {
     const loadArticleInfo = async () => {
       const { data } = await axios.get(`/api/articles/${articleId}`);
-      setArticleInfo({ upvotes: data.upvotes, comments: [] });
+      setArticleInfo({ upvotes: data.upvotes, comments: data.comments });
     }
     loadArticleInfo();
   }, []);
@@ -30,6 +31,7 @@ const ArticlePage = () => {
       {article.content.map((paragraph, i) => (
         <p key={i}>{ paragraph }</p>
       ))}
+      <CommentsList comments={articleInfo.comments} />
     </>
   );
 };
