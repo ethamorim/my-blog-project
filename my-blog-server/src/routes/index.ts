@@ -43,7 +43,7 @@ router.put('/api/articles/:articleId/upvote', async (req: Request<{ articleId: s
         const article = new Article(document._id, document.name, document.upvotes, document.comments, document.author);
         article.upvote();
         if (await updateOneById(articlesCollection, article.getId(), { $set: { upvotes: article.getUpvotes() } })) {
-            res.sendStatus(200);
+            res.json(article);
         } else {
             res.status(500).send('Something went wrong updating this article...');
         }
