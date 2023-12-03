@@ -7,6 +7,7 @@ export default interface IArticle {
     id: ObjectId,
     name: string,
     upvotes: number,
+    upvoteIds: string[],
     author: IAdmin,
     comments: IComment[],
     

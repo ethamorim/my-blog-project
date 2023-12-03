@@ -9,13 +9,15 @@ export default class Article implements IArticle {
     id: ObjectId;
     name: string;
     upvotes: number;
+    upvoteIds: string[];
     comments: IComment[];
     author: IAdmin;
 
-    constructor(id: ObjectId, name: string, upvotes: number, comments: IComment[], author: IAdmin) {
+    constructor(id: ObjectId, name: string, upvotes: number, upvoteIds: string[] , comments: IComment[], author: IAdmin) {
         this.id = id;
         this.name = name;
         this.upvotes = upvotes;
+        this.upvoteIds = upvoteIds;
         this.comments = comments;
         this.author = author;
     }

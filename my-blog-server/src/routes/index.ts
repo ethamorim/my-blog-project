@@ -16,6 +16,7 @@ router.get(['/api/articles', '/api/articles/:articleId'], async (req: Request<{a
     getConnection([ ARTICLES_COLLECTION ], async (collections: TCollections) => {
         const articlesCollection = collections[ARTICLES_COLLECTION];
         const { articleId } = req.params;
+
         if (articleId) {
             let document: WithId<Document>;
             try {
@@ -23,6 +24,11 @@ router.get(['/api/articles', '/api/articles/:articleId'], async (req: Request<{a
             } catch (error) {
                 return res.status(404).send('Article not found');
             }
+
+            const { uid } = req.user ? req.user : { uid: null };
+            const upvoteIds = document.upvoteIds || [];
+            document.canUpvote = uid && !upvoteIds.includes(uid);
+
             res.json(document);
         } else {
             res.json(await articlesCollection.find({}).toArray());
@@ -40,7 +46,7 @@ router.put('/api/articles/:articleId/upvote', async (req: Request<{ articleId: s
         } catch (error) {
             return res.status(404).send('Article not found');
         }
-        const article = new Article(document._id, document.name, document.upvotes, document.comments, document.author);
+        const article = new Article(document._id, document.name, document.upvotes, document.upvoteIds, document.comments, document.author);
         article.upvote();
         if (await updateOneById(articlesCollection, article.getId(), { $set: { upvotes: article.getUpvotes() } })) {
             res.json(article);
@@ -62,7 +68,7 @@ router.post('/api/articles/:articleId/comment', (req: Request<{ articleId: strin
         } catch (error) {
             return res.status(404).send('Article not found');
         }
-        const article = new Article(document._id, document.name, document.upvotes, document.comments, document.author);
+        const article = new Article(document._id, document.name, document.upvotes, document.upvoteIds, document.comments, document.author);
         const comment = new Comment(postedBy, text);
         article.addComment(comment);
         if (await updateOneById(articlesCollection, article.getId(), { $set: { comments: article.getComments() } })) {
