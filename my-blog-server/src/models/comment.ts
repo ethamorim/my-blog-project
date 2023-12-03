@@ -1,13 +1,16 @@
+import { UserNotAuthenticated } from "../errors/errors";
 import IComment from "../interfaces/comment";
-import IUser from "../interfaces/user";
 
 export default class Comment implements IComment {
 
-    postedBy: IUser;
+    postedById: string;
     text: string;
 
-    constructor(postedBy: IUser, text: string) {
-        this.postedBy = postedBy;
+    constructor(postedById: string | undefined, text: string) {
+        if (!postedById) {
+            throw new UserNotAuthenticated();
+        }
+        this.postedById = postedById;
         this.text = text;
     }
 }

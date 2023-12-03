@@ -1,20 +1,19 @@
 import { ObjectId } from "mongodb";
-import IAdmin from "./admin";
 import IComment from "./comment";
 
 export default interface IArticle {
 
     id: ObjectId,
     name: string,
-    upvotes: number,
     upvoteIds: string[],
-    author: IAdmin,
+    authorId: string,
     comments: IComment[],
     
     getId(): ObjectId;
     getUpvotes(): number;
+    getUpvoteIds(): string[];
     getComments(): IComment[];
-    upvote(): void;
+    upvote(userId: string): void;
     addComment(comment: IComment): void;
 
 }

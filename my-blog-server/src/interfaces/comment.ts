@@ -1,8 +1,6 @@
-import IUser from "./user";
-
 export default interface IComment {
 
-    postedBy: IUser,
+    postedById: string,
     text: string,
 
 }

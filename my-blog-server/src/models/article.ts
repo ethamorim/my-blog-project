@@ -1,4 +1,4 @@
-import IAdmin from "../interfaces/admin";
+import { DuplicateRequest } from "../errors/errors";
 import IArticle from "../interfaces/article";
 import IComment from "../interfaces/comment";
 
@@ -8,38 +8,38 @@ export default class Article implements IArticle {
 
     id: ObjectId;
     name: string;
-    upvotes: number;
     upvoteIds: string[];
+    authorId: string;
     comments: IComment[];
-    author: IAdmin;
 
-    constructor(id: ObjectId, name: string, upvotes: number, upvoteIds: string[] , comments: IComment[], author: IAdmin) {
+    constructor(id: ObjectId, name: string, upvoteIds: string[], authorId: string, comments: IComment[]) {
         this.id = id;
         this.name = name;
-        this.upvotes = upvotes;
         this.upvoteIds = upvoteIds;
+        this.authorId = authorId;
         this.comments = comments;
-        this.author = author;
     }
 
     getId(): ObjectId {
         return this.id;
     }
-
     getUpvotes(): number {
-        return this.upvotes;
+        return this.upvoteIds.length;
     }
-
+    getUpvoteIds(): string[] {
+        return this.upvoteIds;
+    }
     getComments(): IComment[] {
         return this.comments;
     }
-
-    upvote(): void {
-        this.upvotes += 1;
+    upvote(userId: string | undefined): void {
+        if (!userId) return;
+        if (this.upvoteIds.includes(userId)) {
+            throw new DuplicateRequest();
+        }
+        this.upvoteIds.push(userId);
     }
-
     addComment(comment: IComment): void {
         this.comments.push(comment);
     }
-
 }

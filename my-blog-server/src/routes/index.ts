@@ -7,6 +7,9 @@ import { getConnection } from "../database/connection";
 import { TCollections } from "../types/tcollections";
 import { Document, ObjectId, WithId } from "mongodb";
 import { getDocumentById, updateOneById } from "../database/utils/query";
+import { DuplicateRequest, UserNotAuthenticated } from "../errors/errors";
+
+import { getAuth } from 'firebase-admin/auth';
 
 const router = Router();
 
@@ -27,7 +30,19 @@ router.get(['/api/articles', '/api/articles/:articleId'], async (req: Request<{a
 
             const { uid } = req.user ? req.user : { uid: null };
             const upvoteIds = document.upvoteIds || [];
-            document.canUpvote = uid && !upvoteIds.includes(uid);
+            document.hasUpvoted = uid && upvoteIds.includes(uid);
+
+            const promiseCommentsWithAuthor = document.comments.map(async (comment: IComment) => {
+                const fetchedUser = await getAuth().getUser(comment.postedById);
+                const postedBy = fetchedUser.email;
+                
+                return {
+                    text: comment.text,
+                    postedBy
+                }
+            });
+            const commentsWithAuthor = await Promise.all(promiseCommentsWithAuthor);
+            document.comments = commentsWithAuthor;
 
             res.json(document);
         } else {
@@ -38,6 +53,11 @@ router.get(['/api/articles', '/api/articles/:articleId'], async (req: Request<{a
 
 router.put('/api/articles/:articleId/upvote', async (req: Request<{ articleId: string }>, res, next) => {
     getConnection([ ARTICLES_COLLECTION ], async (collections: TCollections) => {
+        if (!userIsAuthenticated(req)) {
+            return res.sendStatus(401);
+        }
+        const user = req.user;
+
         const { articleId } = req.params; 
         const articlesCollection = collections[ARTICLES_COLLECTION];
         let document: WithId<Document>;
@@ -46,9 +66,16 @@ router.put('/api/articles/:articleId/upvote', async (req: Request<{ articleId: s
         } catch (error) {
             return res.status(404).send('Article not found');
         }
-        const article = new Article(document._id, document.name, document.upvotes, document.upvoteIds, document.comments, document.author);
-        article.upvote();
-        if (await updateOneById(articlesCollection, article.getId(), { $set: { upvotes: article.getUpvotes() } })) {
+        const article = new Article(document._id, document.name, document.upvoteIds, document.authorId, document.comments);
+
+        try {
+            article.upvote(user?.uid);
+        } catch (error) {
+            if (error instanceof DuplicateRequest) {
+                return res.status(400).send('User already upvoted');
+            }
+        }
+        if (await updateOneById(articlesCollection, article.getId(), { $set: { upvoteIds: article.getUpvoteIds() } })) {
             res.json(article);
         } else {
             res.status(500).send('Something went wrong updating this article...');
@@ -56,10 +83,18 @@ router.put('/api/articles/:articleId/upvote', async (req: Request<{ articleId: s
     });
 });
 
-router.post('/api/articles/:articleId/comment', (req: Request<{ articleId: string }, {}, IComment>, res, next) => {
+router.post('/api/articles/:articleId/comment', (req: Request<{ articleId: string }, {}, { commentText: string }>, res, next) => {
     getConnection([ ARTICLES_COLLECTION ], async (collections: TCollections) => {
+        if (!userIsAuthenticated(req)) {
+            return res.sendStatus(401);
+        }
+        const user = req.user;
+
         const { articleId } = req.params;
-        const { postedBy, text } = req.body;
+        const { commentText } = req.body;
+        if (!commentText) {
+            return res.send(400).send('Empty comment body');
+        }
         const articlesCollection = collections[ARTICLES_COLLECTION];
     
         let document: WithId<Document>;
@@ -68,15 +103,44 @@ router.post('/api/articles/:articleId/comment', (req: Request<{ articleId: strin
         } catch (error) {
             return res.status(404).send('Article not found');
         }
-        const article = new Article(document._id, document.name, document.upvotes, document.upvoteIds, document.comments, document.author);
-        const comment = new Comment(postedBy, text);
-        article.addComment(comment);
-        if (await updateOneById(articlesCollection, article.getId(), { $set: { comments: article.getComments() } })) {
-            res.status(200).json(article.getComments());
-        } else {
-            res.status(500).send('Something went wrong updating this article...');
+
+        try {
+            const article = new Article(document._id, document.name, document.upvoteIds, document.authorId, document.comments);
+            const comment = new Comment(user?.uid, commentText);
+
+            article.addComment(comment);
+            if (await updateOneById(articlesCollection, article.getId(), { $set: { comments: article.getComments() } })) {
+                const promiseCommentsWithAuthor = article.getComments().map(async (comment: IComment) => {
+                    const fetchedUser = await getAuth().getUser(comment.postedById);
+                    const postedBy = fetchedUser.email;
+                    
+                    return {
+                        text: comment.text,
+                        postedBy
+                    }
+                });
+                const commentsWithAuthor = await Promise.all(promiseCommentsWithAuthor);
+
+                res.status(200).json(commentsWithAuthor);
+            } else {
+                res.status(500).send('Something went wrong updating this article...');
+            }
+        } catch (error) {
+            if (error instanceof UserNotAuthenticated) {
+                res.status(401).send('User is not allowed to perform that action...');
+            } else {
+                res.status(500).send('Something went wrong updating this article...');
+            }        
         }
     });
 });
+
+const userIsAuthenticated = (req: Request) => {
+    if (req.user) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 export default router;
