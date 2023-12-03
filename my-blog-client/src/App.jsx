@@ -8,7 +8,7 @@ import ArticleListPage from './pages/ArticlesListPage';
 import ArticlePage from './pages/ArticlePage';
 import NotFoundPage from './pages/NotFoundPage';
 import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
+import CreateUserPage from './pages/CreateUserPage';
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
             <Route path='/articles' element={<ArticleListPage />} />
             <Route path='/articles/:articleId' element={<ArticlePage />} />
             <Route path='/login' element={<LoginPage />} />
-            <Route path='/signup' element={<SignupPage />} />
+            <Route path='/signup' element={<CreateUserPage />} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </div>
