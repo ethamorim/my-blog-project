@@ -1,3 +1,9 @@
-node_modules/
-.env
+# SENSITIVE
+*.env
 credentials*
+
+# NPM
+node_modules/
+
+# REACT
+build/
