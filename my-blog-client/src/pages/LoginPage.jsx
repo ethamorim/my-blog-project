@@ -19,29 +19,29 @@ const LoginPage = () => {
     };
 
     return (
-        <>
+        <main className="login-main">
             { error && <p>{error}</p> }
-            <h2>Log in</h2>
+            <h2 className="login-title">Log in</h2>
 
-            <label htmlFor='email'>Email:</label>
             <input
                 id='email'
+                placeholder="Email"
                 value={email}
                 onChange={(ev) => setEmail(ev.target.value)}
             />
 
-            <label htmlFor='password'>Password:</label>
             <input
-                type='password' 
+                type='password'
+                placeholder="Password"
                 id='password'
                 value={password}
                 onChange={(ev) => setPassword(ev.target.value)}
             />
 
-            <button onClick={logIn}>Log In</button>
+            <button id='login-button' onClick={logIn}>Log In</button>
 
             <Link to='/signup'>Don't have an account? Sign up!</Link>
-        </>
+        </main>
     );
 }
 
