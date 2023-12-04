@@ -105,7 +105,7 @@ body {
   cursor: pointer;
 } */
 
-.home-title {
+.home-title, .articles-list-title, .articles-list__item-title {
   font-family: var(--headland);
 }
 
@@ -151,15 +151,12 @@ nav a:hover {
   margin: auto;
 }
 
-.article-list-item {
+.articles-list__item {
+  padding: 10px 0 10px;
   text-decoration: none;
   color: black;
-  padding: 16px 0 0 0;
-}
 
-.article-list-item p {
-  padding-bottom: 32px;
-  border-bottom: 2px solid black;
+  border-bottom: 1px solid black;
 }
 
 #add-comment-form {
