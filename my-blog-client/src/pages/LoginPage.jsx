@@ -11,6 +11,10 @@ const LoginPage = () => {
 
     const logIn = async () => {
         try {
+            if (!email || !password) {
+                throw new Error('Invalid email or password');
+            }
+
             await signInWithEmailAndPassword(getAuth(), email, password);
             navigate('/articles');
         } catch (e) {
@@ -20,7 +24,7 @@ const LoginPage = () => {
 
     return (
         <main className="login-main">
-            { error && <p>{error}</p> }
+            { error && <p id='error'>{error}</p> }
             <h2 className="login-title">Log in</h2>
 
             <input

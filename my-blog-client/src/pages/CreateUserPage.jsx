@@ -13,6 +13,9 @@ const CreateUserPage = () => {
     const createUser =  async() => {
         try {
             setError('');
+            if (!email || !password || !confirmPassword) {
+                throw new Error('Please, fill in the form');
+            }
             if (password !== confirmPassword) {
                 throw new Error('Password and Confirm Password do not match');
             }
@@ -24,37 +27,37 @@ const CreateUserPage = () => {
     };
 
     return (
-        <>
-            { error && <p>{error}</p> }
-            <h2>Sign up</h2>
+        <main className="signup-main">
+            { error && <p id='error'>{error}</p> }
+            <h2 className="signup-title">Sign up</h2>
 
-            <label htmlFor='email'>Email:</label>
             <input
                 id='email'
+                placeholder="Email"
                 value={email}
                 onChange={(ev) => setEmail(ev.target.value)}
             />
 
-            <label htmlFor='password'>Password:</label>
             <input
                 type='password' 
+                placeholder="Password"
                 id='password'
                 value={password}
                 onChange={(ev) => setPassword(ev.target.value)}
             />
 
-            <label htmlFor="confirmPassword">Confirm Password:</label>
             <input
                 type="password"
+                placeholder="Confirm Password"
                 id='confirmPassword'
                 value={confirmPassword}
                 onChange={(ev) => setConfirmPassword(ev.target.value)}
             /> 
 
-            <button onClick={createUser}>Create Account</button>
+            <button id='signup-button' onClick={createUser}>Create Account</button>
 
             <Link to='/signup'>Don't have an account? Sign up!</Link>
-        </>
+        </main>
     );
 };
 

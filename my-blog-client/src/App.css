@@ -79,7 +79,8 @@ body {
 .blog-header__user-action button, 
 #upvotes-section button, 
 #add-comment-form button,
-#login-button {
+#login-button,
+#signup-button {
   cursor: pointer;
   padding: 5px 10px;
   border: none;
@@ -99,7 +100,8 @@ body {
 .blog-header__user-action button:hover, 
 #upvotes-section button:hover, 
 #add-comment-form button:hover,
-#login-button:hover {
+#login-button:hover,
+#signup-button:hover {
   background-color: #7474744b;
 }
 
@@ -108,7 +110,8 @@ body {
 .articles-list__item-title,
 .article-title,
 .comments-title,
-.login-title {
+.login-title,
+.signup-title {
   font-family: var(--headland);
 }
 
@@ -136,12 +139,6 @@ h3, h4 {
 
 #add-comment-form h3 {
   margin-bottom: 16px;
-}
-
-.error {
-  padding: 8px;
-  border-radius: 4px;
-  background-color: pink;
 }
 
 #add-comment-form button {
@@ -176,7 +173,7 @@ h3, h4 {
   font-size: 1.2rem;
 }
 
-.login-main {
+.login-main, .signup-main {
   width: 300px;
   margin: 0 auto;
   padding-top: 30px;
@@ -185,7 +182,7 @@ h3, h4 {
   flex-direction: column;
 }
 
-.login-main input {
+.login-main input, .signup-main input {
   box-sizing: border-box;
   width: 100%;
   height: 40px;
@@ -198,12 +195,24 @@ h3, h4 {
   font-size: 1rem;
 }
 
-.login-main a {
+.login-main a, .signup-main a {
   margin: 1rem auto;
   font-size: .9rem;
   color: #000;
 }
 
-.login-main a:hover {
+.login-main a:hover, .signup-main a:hover {
   color: #000000a1;
+}
+
+#error {
+  width: 100%;
+  margin: 0;
+  padding: .5rem;
+  border-radius: 4px;
+  
+  text-align: center;
+  font-size: .9rem;
+  background-color: #ff727288;
+  color: #960000;
 }
