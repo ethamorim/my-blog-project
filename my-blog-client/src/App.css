@@ -1,5 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Headland+One&family=Raleway:wght@300;400;700&display=swap');
+
+:root {
+  --headland: 'Headland One', serif;
+  --raleway: 'Raleway', sans-serif;
+}
+
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--raleway);
   font-size: 18px;
 }
 
@@ -11,6 +18,10 @@ button {
   color: white;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.home-title {
+  font-family: var(--headland);
 }
 
 h3, h4 {

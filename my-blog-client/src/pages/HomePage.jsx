@@ -1,29 +1,20 @@
 const HomePage = () => (
   <>
-    <h1>Hello, welcome to my blog!</h1>
+    <h1 className="home-title">Hello, welcome to my blog!</h1>
     <p>
-        Welcome to my blog! Proin congue
-        ligula id risus posuere, vel eleifend ex egestas. Sed in turpis leo. 
-        Aliquam malesuada in massa tincidunt egestas. Nam consectetur varius turpis, 
-        non porta arcu porttitor non. In tincidunt vulputate nulla quis egestas. Ut 
-        eleifend ut ipsum non fringilla. Praesent imperdiet nulla nec est luctus, at 
-        sodales purus euismod.
+      My name is Ethaniel Amorim and this is a project developed under the course "React: Creating and Hosting a Full-Stack Site" 
+      by Shaun Wassel on LinkedIn Learning, a short course where it was taught how to create a front-end application,
+      a back-end for it, how to integrate Firebase Auth and Admin SDK to it, and how to host it using Google Cloud.
     </p>
+
     <p>
-        Donec vel mauris lectus. Etiam nec lectus urna. Sed sodales ultrices dapibus. 
-        Nam blandit tristique risus, eget accumsan nisl interdum eu. Aenean ac accumsan 
-        nisi. Nunc vel pulvinar diam. Nam eleifend egestas viverra. Donec finibus lectus 
-        sed lorem ultricies, eget ornare leo luctus. Morbi vehicula, nulla eu tempor 
-        interdum, nibh elit congue tellus, ac vulputate urna lorem nec nisi. Morbi id 
-        consequat quam. Vivamus accumsan dui in facilisis aliquet.,
+      This project was created solely for practicing the content given in the course and it has no other purpose to be hosted than
+      to verify its functionalities. Feel free to look around, but you won't find anything useful here (not yet, maybe someday). 
     </p>
+
     <p>
-        Etiam nec lectus urna. Sed sodales ultrices dapibus. 
-        Nam blandit tristique risus, eget accumsan nisl interdum eu. Aenean ac accumsan 
-        nisi. Nunc vel pulvinar diam. Nam eleifend egestas viverra. Donec finibus lectus 
-        sed lorem ultricies, eget ornare leo luctus. Morbi vehicula, nulla eu tempor 
-        interdum, nibh elit congue tellus, ac vulputate urna lorem nec nisi. Morbi id 
-        consequat quam. Vivamus accumsan dui in facilisis aliquet.,
+      If you're curious about the authentication feature, you can also try it and create you own account with a fake email, I swear it's safe (it was
+      made with Firebase Auth, a Google service where I don't have access to any user information other than if it exists or wheter it's logged in or not).
     </p>
   </>
 );
