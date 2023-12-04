@@ -10,7 +10,92 @@ body {
   font-size: 18px;
 }
 
-button {
+.blog-header {
+  padding: 10px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.my-logo {
+  position: relative;
+}
+
+.my-logo span {
+  position: absolute;
+  font-family: var(--headland);
+}
+
+.my-logo__eth{
+  top: -1rem;
+}
+
+.my-logo__amorim {
+  top: -.05rem;
+  left: .7rem;
+}
+
+.blog-header__nav ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: .5rem;
+}
+
+.blog-header__nav li {
+  cursor: pointer;
+
+  position: relative;
+  list-style: none;
+}
+
+.blog-header__nav li:not(.link-active)::after {
+  content: '';
+  
+  width: 0;
+  height: 2px;
+  transition: width .5s;
+}
+
+.blog-header__nav li:hover::after, .link-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  
+  width: 50%;
+  height: 2px;
+  background-color: #000;
+}
+
+.blog-header__nav li a {
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: #000;
+  letter-spacing: -.05rem;
+}
+
+.blog-header__user-action button {
+  cursor: pointer;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+
+  background-color: #74747417;
+  font-family: var(--raleway);
+  font-size: 1rem;
+  letter-spacing: -.05rem;
+
+  display: flex;
+  align-items: center;
+}
+
+.blog-header__user-action button:hover {
+  background-color: #7474744b;
+}
+
+/* button {
   padding: 16px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 16px;
@@ -18,7 +103,7 @@ button {
   color: white;
   border-radius: 8px;
   cursor: pointer;
-}
+} */
 
 .home-title {
   font-family: var(--headland);
@@ -28,16 +113,16 @@ h3, h4 {
   margin-bottom: 0;
 }
 
-nav {
+/* nav {
   border-bottom: 4px solid black;
   text-align: center;
   position: fixed;
   top: 0;
   width: 100%;
   background: white;
-}
+} */
 
-nav ul {
+/* nav ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -59,12 +144,11 @@ nav a {
 nav a:hover {
   background: black;
   color: white;
-}
+} */
 
 #page-body {
   max-width: 700px;
   margin: auto;
-  padding-top: 72px;
 }
 
 .article-list-item {
@@ -118,8 +202,8 @@ input, textarea {
   padding: 16px;
 }
 
-.nav-right {
+/* .nav-right {
   position: absolute;
   top: 8px;
   right: 8px;
-}
+} */

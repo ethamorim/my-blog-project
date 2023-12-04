@@ -1,35 +1,64 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import { getAuth, signOut } from "firebase/auth";
+import { useState } from "react";
 
 const NavBar = () => {
     const navigate = useNavigate();
-    const { user, isLoading } = useUser();
+    const location = useLocation();
+    const { user } = useUser();
+
+    const [ activeLink, setActiveLink ] = useState(location.pathname);
+    const links = [
+        {
+            name: 'Home',
+            route: '/',
+        },
+        {
+            name: 'Articles',
+            route: '/articles'
+        }
+    ];
+    const renderNav = () => {
+        return links.map(link => (
+            <li 
+                key={link.route} 
+                className={activeLink === link.route ? 'link-active' : ''}
+                onClick={() => {
+                    setActiveLink(link.route);
+                    navigate(link.route);
+                }}>
+                <Link to='#'>{link.name}</Link>
+            </li>
+        ));
+    };
 
     return (
-        <>
-            <nav>
+        <header className="blog-header">
+            <div className="my-logo">
+                <span className="my-logo__eth">Eth</span>
+                <span className="my-logo__amorim">Amorim</span>
+            </div>
+
+            <nav className="blog-header__nav">
                 <ul>
-                    <li>
-                        <Link to='/'>Home</Link>
-                    </li>
-                    <li>
-                        <Link to='/about'>About</Link>
-                    </li>
-                    <li>
-                        <Link to='/articles'>Articles</Link>
-                    </li>
+                    { renderNav() }
                 </ul>
             </nav>
 
-            <div className="nav-right">
+            <div className="blog-header__user-action">
                 {
                     user 
-                    ? <button onClick={() => signOut(getAuth())}>Log out</button>
+                    ? (
+                        <button onClick={() => signOut(getAuth())}>
+                            <i className="material-symbols-outlined">logout</i>
+                            Log out
+                        </button>
+                    ) 
                     : <button onClick={() => navigate('/login')}>Log in</button>
                 }
             </div>
-        </>
+        </header>
     );
 };
 
