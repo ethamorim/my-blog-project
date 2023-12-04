@@ -31,16 +31,13 @@ const AddCommentForm = ({ articleId, onArticleUpdated }) => {
                 user
                 ? (
                     <>
-                        <h3>Add a Comment</h3>
-                        <label>
-                            Comment:
-                            <textarea 
-                                rows="4" 
-                                cols="50" 
-                                value={commentText}
-                                onChange={e => setCommentText(e.target.value)}    
-                            />
-                        </label>
+                        <h3 className="comment-form-title">Add a Comment:</h3>
+                            
+                        <textarea 
+                            value={commentText}
+                            onChange={e => setCommentText(e.target.value)}    
+                        />
+                        
                         <button onClick={addComment}>Add Comment</button>
                     </>
                 ) : (

@@ -110,6 +110,7 @@ body {
 .articles-list__item-title,
 .article-title,
 .comments-title,
+.comment-form-title,
 .login-title,
 .signup-title {
   font-family: var(--headland);
@@ -121,7 +122,7 @@ h3, h4 {
 
 #page-body {
   max-width: 700px;
-  margin: auto;
+  margin: 0 auto 3rem;
 }
 
 .articles-list__item {
@@ -130,6 +131,10 @@ h3, h4 {
   color: black;
 
   border-bottom: 1px solid black;
+}
+
+.upvoted {
+  opacity: .5;
 }
 
 #add-comment-form {
@@ -173,16 +178,7 @@ h3, h4 {
   font-size: 1.2rem;
 }
 
-.login-main, .signup-main {
-  width: 300px;
-  margin: 0 auto;
-  padding-top: 30px;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.login-main input, .signup-main input {
+.login-main input, .signup-main input, #add-comment-form textarea {
   box-sizing: border-box;
   width: 100%;
   height: 40px;
@@ -193,6 +189,22 @@ h3, h4 {
 
   font-family: var(--raleway);
   font-size: 1rem;
+}
+
+#add-comment-form textarea {
+  resize: none;
+  width: 320px;
+  height: 100px;
+  display: block;
+}
+
+.login-main, .signup-main {
+  width: 300px;
+  margin: 0 auto;
+  padding-top: 30px;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .login-main a, .signup-main a {

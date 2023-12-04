@@ -56,7 +56,7 @@ const ArticlePage = () => {
       );
     } else if (user && articleInfo.hasUpvoted) {
       return (
-        <button>Upvoted!</button>
+        <button className="upvoted">Upvoted!</button>
       );
     } else {
       return (
