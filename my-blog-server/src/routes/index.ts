@@ -31,18 +31,7 @@ router.get(['/api/articles', '/api/articles/:articleId'], async (req: Request<{a
             const { uid } = req.user ? req.user : { uid: null };
             const upvoteIds = document.upvoteIds || [];
             document.hasUpvoted = uid && upvoteIds.includes(uid);
-
-            const promiseCommentsWithAuthor = document.comments.map(async (comment: IComment) => {
-                const fetchedUser = await getAuth().getUser(comment.postedById);
-                const postedBy = fetchedUser.email;
-                
-                return {
-                    text: comment.text,
-                    postedBy
-                }
-            });
-            const commentsWithAuthor = await Promise.all(promiseCommentsWithAuthor);
-            document.comments = commentsWithAuthor;
+            document.comments = await addUserEmailToComments(document.comments);
 
             res.json(document);
         } else {
@@ -110,17 +99,7 @@ router.post('/api/articles/:articleId/comment', (req: Request<{ articleId: strin
 
             article.addComment(comment);
             if (await updateOneById(articlesCollection, article.getId(), { $set: { comments: article.getComments() } })) {
-                const promiseCommentsWithAuthor = article.getComments().map(async (comment: IComment) => {
-                    const fetchedUser = await getAuth().getUser(comment.postedById);
-                    const postedBy = fetchedUser.email;
-                    
-                    return {
-                        text: comment.text,
-                        postedBy
-                    }
-                });
-                const commentsWithAuthor = await Promise.all(promiseCommentsWithAuthor);
-
+                const commentsWithAuthor = await addUserEmailToComments(article.getComments());
                 res.status(200).json(commentsWithAuthor);
             } else {
                 res.status(500).send('Something went wrong updating this article...');
@@ -141,6 +120,20 @@ const userIsAuthenticated = (req: Request) => {
     } else {
         return false;
     }
-}
+};
+
+const addUserEmailToComments =  async (comments: IComment[]) => {
+    const promiseCommentsWithAuthor = comments.map(async (comment: IComment) => {
+        const fetchedUser = await getAuth().getUser(comment.postedById);
+        const postedBy = fetchedUser.email;
+        
+        return {
+            text: comment.text,
+            postedBy
+        }
+    });
+    const commentsWithAuthor = await Promise.all(promiseCommentsWithAuthor);
+    return commentsWithAuthor;
+};
 
 export default router;
