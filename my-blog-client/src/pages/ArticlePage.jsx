@@ -56,41 +56,32 @@ const ArticlePage = () => {
       );
     } else if (user && articleInfo.hasUpvoted) {
       return (
-        <div className="upvotes-section">
-          <span>Upvoted!</span>
-          <p>This article has { articleInfo.upvoteIds.length } upvote(s)</p>
-        </div>
+        <button>Upvoted!</button>
       );
     } else {
       return (
-        <div className="upvotes-section">
-            <button onClick={addUpvote}>Upvote</button>
-            <p>This article has { articleInfo.upvoteIds.length } upvote(s)</p>
-          </div>
+        <button onClick={addUpvote}>Upvote</button>
       );
     }
   };
   
   return (
     <>
-      <h1>{article.title}</h1>
+      <h1 className="article-title">{article.title}</h1>
 
-      { getUpvoteButton() }
+      <div id="upvotes-section">
+        { getUpvoteButton() }
+        <span>{ articleInfo.upvoteIds.length } upvote(s)</span>
+      </div>
 
       {article.content.map((paragraph, i) => (
         <p key={i}>{ paragraph }</p>
       ))}
-      {
-        user
-          ? (
-            <AddCommentForm 
-              articleId={articleId}
-              onArticleUpdated={comments => setArticleInfo({ ...articleInfo, comments })}
-            />
-          ) : (
-            <button>Log in to comment</button>
-          )
-      }
+
+      <AddCommentForm 
+        articleId={articleId}
+        onArticleUpdated={comments => setArticleInfo({ ...articleInfo, comments })}
+      />
       
       <CommentsList comments={articleInfo.comments} />
     </>

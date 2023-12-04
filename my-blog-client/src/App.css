@@ -76,7 +76,7 @@ body {
   letter-spacing: -.05rem;
 }
 
-.blog-header__user-action button {
+.blog-header__user-action button, #upvotes-section button, #add-comment-form button {
   cursor: pointer;
   padding: 5px 10px;
   border: none;
@@ -86,12 +86,14 @@ body {
   font-family: var(--raleway);
   font-size: 1rem;
   letter-spacing: -.05rem;
+}
 
+.blog-header__user-action button {
   display: flex;
   align-items: center;
 }
 
-.blog-header__user-action button:hover {
+.blog-header__user-action button:hover, #upvotes-section button:hover, #add-comment-form button:hover {
   background-color: #7474744b;
 }
 
@@ -105,7 +107,11 @@ body {
   cursor: pointer;
 } */
 
-.home-title, .articles-list-title, .articles-list__item-title {
+.home-title, 
+.articles-list-title, 
+.articles-list__item-title,
+.article-title,
+.comments-title {
   font-family: var(--headland);
 }
 
@@ -160,7 +166,7 @@ nav a:hover {
 }
 
 #add-comment-form {
-  border-bottom: 2px solid black;
+  border-bottom: 1px solid black;
   padding: 16px;
 }
 
@@ -189,14 +195,32 @@ input, textarea {
   width: 320px;
 }
 
-#upvotes-section button, p {
-  display: inline-block;
-  margin-right: 16px;
+#upvotes-section button {
+  margin-right: 10px;
+}
+
+.comments-title {
+  margin-bottom: 10px;
 }
 
 .comment {
-  border-bottom: 2px solid black;
-  padding: 16px;
+  border-bottom: 1px solid black;
+  padding: 10px;
+}
+
+.comment h4 {
+  margin: 0;
+  font-weight: 200;
+  font-size: 1rem;
+}
+
+.comment h4 strong {
+  font-weight: 600;
+}
+
+.comment p {
+  margin: 5px 0;
+  font-size: 1.2rem;
 }
 
 /* .nav-right {

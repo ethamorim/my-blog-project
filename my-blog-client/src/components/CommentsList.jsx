@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
-import { useUser } from "../hooks/useUser";
-
 const CommentsList = ({ comments }) => {
     const renderComments = () => {
         const newCommentsArray = comments.map(comment => (
             <div className="comment" key={comment.postedBy + ': ' + comment.text}>
-                <h4>{ comment.postedBy }</h4>
+                <h4><strong>{ comment.postedBy }</strong> said:</h4>
                 <p>{ comment.text }</p>
             </div>
         ));
@@ -14,7 +11,7 @@ const CommentsList = ({ comments }) => {
 
     return (
         <>
-            <h3>Comments:</h3>
+            <h3 className="comments-title">Comments:</h3>
             { renderComments() }
         </>
     )

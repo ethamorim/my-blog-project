@@ -1,11 +1,12 @@
 import axios from "axios";
+import { useNavigate } from 'react-router-dom'
 import { useState } from "react";
 import { useUser } from "../hooks/useUser";
 
 const AddCommentForm = ({ articleId, onArticleUpdated }) => {
-    const [ name, setName ] = useState('');
+    const navigate = useNavigate();
     const [ commentText, setCommentText ] = useState('');
-    const { user, isLoading } = useUser();
+    const { user } = useUser();
 
     const addComment = async () => {
         try {
@@ -18,7 +19,6 @@ const AddCommentForm = ({ articleId, onArticleUpdated }) => {
                 headers
             });
             onArticleUpdated(data);
-            setName('');
             setCommentText('');
         } catch (error) {
             console.log(error);
@@ -27,17 +27,27 @@ const AddCommentForm = ({ articleId, onArticleUpdated }) => {
 
     return (
         <div id="add-comment-form">
-            <h3>Add a Comment</h3>
-            <label>
-                Comment:
-                <textarea 
-                    rows="4" 
-                    cols="50" 
-                    value={commentText}
-                    onChange={e => setCommentText(e.target.value)}    
-                />
-            </label>
-            <button onClick={addComment}>Add Comment</button>
+            {
+                user
+                ? (
+                    <>
+                        <h3>Add a Comment</h3>
+                        <label>
+                            Comment:
+                            <textarea 
+                                rows="4" 
+                                cols="50" 
+                                value={commentText}
+                                onChange={e => setCommentText(e.target.value)}    
+                            />
+                        </label>
+                        <button onClick={addComment}>Add Comment</button>
+                    </>
+                ) : (
+                    <button onClick={() => navigate('/login')}>Log in to comment</button>
+                )
+            }
+            
         </div>
     )
 };
